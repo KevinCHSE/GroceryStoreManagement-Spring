@@ -1,0 +1,64 @@
+# Grocery Store Management API
+
+REST API for managing a small grocery store: products and stock, customers with credit, sales and customer payments. Built for a real grocery store.
+
+**Live demo:** [link] · **Frontend repo:** [grocery-store-management-angular](link)
+> the project runs on Render's free tier, the first request can take up to a minute to wake the server.
+
+## Features
+- Product catalog with images and stock control
+- Customers with credit tracking: used credit grows with credit sales and drops with payments
+- Invoices paid in cash or on credit; stock and balances update in the same transaction
+- Payments (abonos) and per-customer payment reports
+- JWT login with roles (`ADMIN`, `USER`) and user management
+
+## Tech stack
+Java 26 · Spring Boot 4 · Spring Security + JWT · Spring Data JPA / Hibernate · MySQL · Bean Validation · Maven · Docker · Render
+
+## Architecture
+```mermaid
+flowchart LR
+    A[Angular SPA] -->|REST + JWT| B[Controllers]
+    B --> C[Services - business rules]
+    C --> D[Repositories - Spring Data JPA]
+    D --> E[(MySQL)]
+```
+
+## Technical highlights
+- Layered architecture (controller / service / repository) with DTOs and request validation
+- Stateless authentication with JWT, BCrypt password hashing and role-based authorization
+- Business operations wrapped in `@Transactional` so stock and customer balances stay consistent
+- Centralized error handling with `@RestControllerAdvice`
+- Secrets loaded from environment variables, never committed
+- Dockerized and deployed on Render
+
+## Run locally
+**Requirements:** JDK 26, MySQL 8
+
+```bash
+git clone https://github.com/KevinCHSE/grocery-store-management-spring.git 
+cd grocery-store-management-spring
+cp .env.example .env     # then edit the values
+./mvnw spring-boot:run
+```
+The API runs at `http://localhost:8080`. 
+
+this porject was designed as a private API, sso creating the first user requires a
+temporary change:
+1. In `UserController`, remove `@PreAuthorize` from `saveUser`.
+2. In `filterChain`, add `.requestMatchers(HttpMethod.POST, "/User/saveUser").permitAll()`.
+3. Start the app and send `POST http://localhost:8080/User/saveUser` from Postman:
+   { "id": "123456789", "name": "yourName", "password": "change-me",
+     "phone": "8888-8888", "enable": true, "Admin": true }
+4. **Revert both changes**, otherwise anyone can create admin users.
+
+## API overview
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/login` | Get a JWT |
+| GET | `/apiClients/getClients` | List customers |
+| GET | `/apiPayment/getPaymentReports/{id}` | Payment report for a customer |
+| GET | `/apiImage/{id}/image` | Product image |
+
+## Author
+Kevin · [LinkedIn](link) · [GitHub](https://github.com/KevinCHSE)

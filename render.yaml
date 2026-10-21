@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: grocery-store-management
+    runtime: docker
+    envVars:
+      - key: JAVA_OPTS
+        value: -Xmx350m -Xss256k
