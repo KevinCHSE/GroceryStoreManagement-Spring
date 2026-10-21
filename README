@@ -2,7 +2,7 @@
 
 REST API for managing a small grocery store: products and stock, customers with credit, sales and customer payments. Built for a real grocery store.
 
-**Live demo:** [link] · **Frontend repo:** [grocery-store-management-angular](link)
+**Live demo:  https://grocery-store-management-angular.vercel.app/**  · **Frontend repo:https://github.com/KevinCHSE/GroceryStoreManagement-Spring**
 > the project runs on Render's free tier, the first request can take up to a minute to wake the server.
 
 ## Features
@@ -36,7 +36,7 @@ flowchart LR
 **Requirements:** JDK 26, MySQL 8
 
 ```bash
-git clone https://github.com/KevinCHSE/grocery-store-management-spring.git 
+git clone https://github.com/KevinCHSE/GroceryStoreManagement-Spring.git 
 cd grocery-store-management-spring
 cp .env.example .env     # then edit the values
 ./mvnw spring-boot:run
